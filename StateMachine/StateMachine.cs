@@ -1,13 +1,25 @@
 ﻿namespace RoadieRichStateMachine
 {
+	/// <summary>
+	/// The core State Machine class
+	/// </summary>
 	public class StateMachine : IDisposable
 	{
 		private bool disposedValue;
 
+		/// <summary>
+		/// <see cref="State"/> the state machine starts in
+		/// </summary>
 		public State InitialState { get; set; } = ExitState;
 
+		/// <summary>
+		/// If a state's <see cref="Transition"/> points to this state, the state machine is terminated.
+		/// </summary>
 		public static ExitState ExitState { get; } = new();
 
+		/// <summary>
+		/// Start the state machine
+		/// </summary>
 		public void Run()
 		{
 			var state = InitialState;

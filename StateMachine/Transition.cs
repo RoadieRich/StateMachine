@@ -1,10 +1,10 @@
 ﻿namespace RoadieRichStateMachine
 {
-	public class Transition :IDisposable
+	internal class Transition :IDisposable
 	{
 		private bool disposedValue;
 
-		public Transition(State to, TransitionConditionDelegate? condition)
+		internal Transition(State to, TransitionConditionDelegate? condition)
 		{
 			To = to;
 			Condition = condition;
@@ -20,7 +20,7 @@
 		{
 			if (!disposedValue)
 			{
-				disposedValue = true;
+				disposedValue = true; //moved here to prevent infinite loop
 				if (disposing)
 				{
 					((IDisposable)To).Dispose();
