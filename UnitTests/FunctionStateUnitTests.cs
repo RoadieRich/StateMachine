@@ -100,11 +100,5 @@ namespace UnitTests
 
 			Assert.AreEqual(expected: 1, actual: anInt);
 		}
-
-		[TestMethod]
-		public void MyTestMethod()
-		{
-			Assert.Fail();
-		}
 	}
 }
