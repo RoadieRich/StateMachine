@@ -26,8 +26,7 @@ jobs:
       run: dotnet build --no-restore
     - name: Test
       run: dotnet test --no-build --verbosity normal
-    - name: Upload
-      uses: actions/upload-artifact@v4
-      with:
-        name: RoadieRichStateMachine
-        path: /home/runner/work/StateMachine/StateMachine/StateMachine/bin/Debug/net7.0/*
+    - name: Pack
+      run: dotnet pack StateMachine
+    - name: Publish
+      run: dotnet nuget push StateMachine/bin/Release/RoadieRichStateMachine*.nupkg -k ${PUBLISH_KEY} --source https://api.nuget.org/v3/index.json
