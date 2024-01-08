@@ -1,6 +1,6 @@
 ﻿namespace RoadieRichStateMachine
 {
-	internal class Transition :IDisposable
+	internal class Transition : IDisposable
 	{
 		private bool disposedValue;
 
