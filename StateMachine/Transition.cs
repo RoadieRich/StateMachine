@@ -2,25 +2,36 @@
 {
 	internal class Transition : IDisposable
 	{
-		private bool disposedValue;
+		private bool _disposedValue;
+		internal State To { get; }
+		private readonly TransitionConditionDelegateWithVars? _condition;
 
+		internal Transition(State to, TransitionConditionDelegateWithVars? condition)
+		{
+			To = to;
+			_condition = condition;
+		}
 		internal Transition(State to, TransitionConditionDelegate? condition)
 		{
 			To = to;
-			Condition = condition;
+			_condition = condition == null ? null : ((vars) => condition());
 		}
-		public State To { get; }
-		public TransitionConditionDelegate? Condition { get; }
-		public bool CheckCondition(Dictionary<string, dynamic> vars)
+
+		public Transition(State to)
 		{
-			return Condition == null || Condition(vars);
+			To = to;
+		}
+
+		internal bool CheckCondition(Dictionary<string, dynamic> vars)
+		{
+			return _condition == null || _condition(vars);
 		}
 
 		protected virtual void Dispose(bool disposing)
 		{
-			if (!disposedValue)
+			if (!_disposedValue)
 			{
-				disposedValue = true; //moved here to prevent infinite loop
+				_disposedValue = true; //moved here to prevent infinite loop
 				if (disposing)
 				{
 					((IDisposable)To).Dispose();

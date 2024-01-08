@@ -19,6 +19,26 @@
 			transitions.Add(new Transition(to, condition));
 		}
 
+		/// <summary>
+		/// Adds a state this state can transition to
+		/// </summary>
+		/// <param name="to">state to transition to</param>
+		/// <param name="condition">condition to transition.  Evaluated each time <see cref="Inner(Dictionary{string, dynamic})"/> is run.  If true, the state machine moves to the associated state.  Use <c>null</c> to always transition.</param>
+		/// <remarks>Transition conditions are evaulated in the order they are added.</remarks>
+		public void AddTransitionTo(State to, TransitionConditionDelegateWithVars? condition)
+		{
+			transitions.Add(new Transition(to, condition));
+		}
+
+		/// <summary>
+		/// Adds a state this state will always transition to if this transition is reached
+		/// </summary>
+		/// <param name="to">state to transition to</param>
+		public void AddTransitionTo(State to)
+		{
+			transitions.Add(new Transition(to));
+		}
+
 		internal State RunAndGetNextState(Dictionary<string, dynamic> vars)
 		{
 			Enter(vars);

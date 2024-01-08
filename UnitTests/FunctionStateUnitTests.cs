@@ -19,9 +19,9 @@ namespace UnitTests
 		{
 			var b = false;
 
-			var funcState = new FunctionState((vars) => b = true);
+			var funcState = new FunctionState(() => b = true);
 
-			funcState.AddTransitionTo(StateMachine.ExitState, null);
+			funcState.AddTransitionTo(StateMachine.ExitState);
 
 			using var sm = new StateMachine();
 
@@ -36,9 +36,9 @@ namespace UnitTests
 		{
 			var aBool = false;
 
-			var funcState = new FunctionState((vars) => aBool = true, (vars) => { }, null);
+			var funcState = new FunctionState(() => aBool = true, () => { }, null);
 
-			funcState.AddTransitionTo(StateMachine.ExitState, null);
+			funcState.AddTransitionTo(StateMachine.ExitState);
 
 			using var sm = new StateMachine();
 
@@ -53,9 +53,9 @@ namespace UnitTests
 		{
 			var aBool = false;
 
-			var funcState = new FunctionState(null, (vars) => { }, (vars) => aBool = true);
+			var funcState = new FunctionState(null, () => { }, () => aBool = true);
 
-			funcState.AddTransitionTo(StateMachine.ExitState, null);
+			funcState.AddTransitionTo(StateMachine.ExitState);
 
 			using var sm = new StateMachine();
 
@@ -70,9 +70,9 @@ namespace UnitTests
 		{
 			var anInt = 0;
 
-			var funcState = new FunctionState((vars) => anInt++, (vars) => { }, null);
+			var funcState = new FunctionState(() => anInt++, () => { }, null);
 
-			funcState.AddTransitionTo(StateMachine.ExitState, null);
+			funcState.AddTransitionTo(StateMachine.ExitState);
 
 			using var sm = new StateMachine();
 
@@ -88,9 +88,9 @@ namespace UnitTests
 
 			var anInt = 0;
 
-			var funcState = new FunctionState(null, (vars) => { }, (vars) => anInt++);
+			var funcState = new FunctionState(null, () => { }, () => anInt++);
 
-			funcState.AddTransitionTo(StateMachine.ExitState, null);
+			funcState.AddTransitionTo(StateMachine.ExitState);
 
 			using var sm = new StateMachine();
 

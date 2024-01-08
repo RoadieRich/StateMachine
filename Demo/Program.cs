@@ -37,17 +37,17 @@ using (var classSM = new StateMachine())
 	var evenState = new EvenState();
 	var incrementState = new IncrementState();
 
-	initState.AddTransitionTo(mainState, null);
+	initState.AddTransitionTo(mainState);
 
 	mainState.AddTransitionTo(oddState, (vars) => vars["x"] % 2 == 1);
 	mainState.AddTransitionTo(evenState, (vars) => vars["x"] % 2 == 0);
 
-	oddState.AddTransitionTo(incrementState, null);
+	oddState.AddTransitionTo(incrementState);
 
-	evenState.AddTransitionTo(incrementState, null);
+	evenState.AddTransitionTo(incrementState);
 
 	incrementState.AddTransitionTo(StateMachine.ExitState, (vars) => vars["x"] > 10);
-	incrementState.AddTransitionTo(mainState, null);
+	incrementState.AddTransitionTo(mainState);
 
 	classSM.InitialState = initState;
 	classSM.Run();
