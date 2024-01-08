@@ -12,6 +12,8 @@
 		/// </summary>
 		public State InitialState { get; set; } = ExitState;
 
+		public int Delay { get; set; } = 0;
+
 		/// <summary>
 		/// If a state's <see cref="Transition"/> points to this state, the state machine is terminated.
 		/// </summary>
@@ -26,7 +28,20 @@
 			var vars = new Dictionary<string, dynamic>();
 			while (state != ExitState)
 			{
-				state = state.RunAndGetNextState(vars);
+				state = state.RunAndGetNextState(Delay, vars);
+			}
+		}
+
+		/// <summary>
+		/// Start the state machine
+		/// </summary>
+		public async void RunAsync(CancellationToken cancellationToken = default)
+		{
+			var state = InitialState;
+			var vars = new Dictionary<string, dynamic>();
+			while (state != ExitState && !cancellationToken.IsCancellationRequested)
+			{
+				state = await state.RunAndGetNextStateAsync(Delay, vars, cancellationToken);
 			}
 		}
 

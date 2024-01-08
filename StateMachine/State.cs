@@ -19,7 +19,23 @@
 			transitions.Add(new Transition(to, condition));
 		}
 
-		internal State RunAndGetNextState(Dictionary<string, dynamic> vars)
+		internal async Task<State> RunAndGetNextStateAsync(int delay, Dictionary<string, dynamic> vars, CancellationToken cancellationToken)
+		{
+			Enter(vars);
+			
+			State? next = null;
+			while (next == null)
+			{
+				cancellationToken.ThrowIfCancellationRequested();
+				Inner(vars);
+				next = GetNextState(vars);
+				await Task.Delay(delay, cancellationToken);
+			}
+			Exit(vars);
+			return next;
+		}
+
+		internal State RunAndGetNextState(int delay, Dictionary<string, dynamic> vars)
 		{
 			Enter(vars);
 			State? next = null;
@@ -27,6 +43,7 @@
 			{
 				Inner(vars);
 				next = GetNextState(vars);
+				Thread.Sleep(delay);
 			}
 			Exit(vars);
 			return next;
