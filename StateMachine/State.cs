@@ -19,7 +19,7 @@
 			transitions.Add(new Transition(to, condition));
 		}
 
-		internal State RunAndGetNextState(IDictionary<string, dynamic> vars)
+		internal State RunAndGetNextState(int delay, IDictionary<string, dynamic> vars)
 		{
 			Enter(vars);
 			State? next = null;
@@ -27,6 +27,7 @@
 			{
 				Inner(vars);
 				next = GetNextState(vars);
+				Thread.Sleep(delay);
 			}
 			Exit(vars);
 			return next;

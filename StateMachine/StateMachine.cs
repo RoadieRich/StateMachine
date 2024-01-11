@@ -12,6 +12,8 @@
 		/// </summary>
 		public State InitialState { get; set; } = ExitState;
 
+		public int Delay { get; set; } = 0;
+
 		/// <summary>
 		/// If a state's <see cref="Transition"/> points to this state, the state machine is terminated.
 		/// </summary>
@@ -28,7 +30,7 @@
 			
 			while (state != ExitState)
 			{
-				state = state.RunAndGetNextState(myVars);
+				state = state.RunAndGetNextState(Delay, myVars);
 			}
 		}
 
