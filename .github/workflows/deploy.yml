@@ -29,8 +29,7 @@ jobs:
     - name: Test
       run: dotnet test --verbosity normal
       
-    - name: Set API key
-      run: nuget setapikey ${PUBLISH_KEY} -Source https://www.nuget.org/api/v2/package
-      
     - name: Publish
-      run: dotnet nuget push StateMachine/bin/Release/RoadieRichStateMachine*.nupkg
+      env:
+        PUBLISH_KEY: ${{ secrets.PUBLISH_KEY }}
+      run: dotnet nuget push StateMachine/bin/Release/RoadieRichStateMachine*.nupkg -k $PUBLISH_KEY
