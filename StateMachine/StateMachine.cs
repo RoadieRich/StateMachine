@@ -22,26 +22,15 @@
 		/// <summary>
 		/// Start the state machine
 		/// </summary>
-		public void Run()
+		/// <param name="vars">A variable context to intialize with</param>
+		public void Run(IDictionary<string, dynamic>? vars = null)
 		{
 			var state = InitialState;
-			var vars = new Dictionary<string, dynamic>();
+			IDictionary<string, dynamic> myVars = vars ?? new Dictionary<string, dynamic>();
+			
 			while (state != ExitState)
 			{
-				state = state.RunAndGetNextState(Delay, vars);
-			}
-		}
-
-		/// <summary>
-		/// Start the state machine
-		/// </summary>
-		public async void RunAsync(CancellationToken cancellationToken = default)
-		{
-			var state = InitialState;
-			var vars = new Dictionary<string, dynamic>();
-			while (state != ExitState && !cancellationToken.IsCancellationRequested)
-			{
-				state = await state.RunAndGetNextStateAsync(Delay, vars, cancellationToken);
+				state = state.RunAndGetNextState(Delay, myVars);
 			}
 		}
 

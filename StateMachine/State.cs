@@ -19,23 +19,7 @@
 			transitions.Add(new Transition(to, condition));
 		}
 
-		internal async Task<State> RunAndGetNextStateAsync(int delay, Dictionary<string, dynamic> vars, CancellationToken cancellationToken)
-		{
-			Enter(vars);
-			
-			State? next = null;
-			while (next == null)
-			{
-				cancellationToken.ThrowIfCancellationRequested();
-				Inner(vars);
-				next = GetNextState(vars);
-				await Task.Delay(delay, cancellationToken);
-			}
-			Exit(vars);
-			return next;
-		}
-
-		internal State RunAndGetNextState(int delay, Dictionary<string, dynamic> vars)
+		internal State RunAndGetNextState(int delay, IDictionary<string, dynamic> vars)
 		{
 			Enter(vars);
 			State? next = null;
@@ -49,7 +33,7 @@
 			return next;
 		}
 
-		protected internal State? GetNextState(Dictionary<string, dynamic> vars)
+		protected internal State? GetNextState(IDictionary<string, dynamic> vars)
 		{
 			foreach (var transition in transitions)
 			{
@@ -63,19 +47,19 @@
 		/// Called when the State Machine enters the state 
 		/// </summary>
 		/// <param name="vars">A <see cref="Dictionary{string, dynamic}"/> of variables to be used in execution</param>
-		protected abstract void Enter(Dictionary<string, dynamic> vars);
+		protected abstract void Enter(IDictionary<string, dynamic> vars);
 
 		/// <summary>
 		/// This method is executed repeatedly while the state machine is in this state
 		/// </summary>
 		/// <param name="vars">A <see cref="Dictionary{string, dynamic}"/> of variables to be used in execution</param>
-		protected abstract void Inner(Dictionary<string, dynamic> vars);
+		protected abstract void Inner(IDictionary<string, dynamic> vars);
 
 		/// <summary>
 		/// Called before the state machine exits this state
 		/// </summary>
 		/// <param name="vars">A <see cref="Dictionary{string, dynamic}"/> of variables to be used in execution</param>
-		protected abstract void Exit(Dictionary<string, dynamic> vars);
+		protected abstract void Exit(IDictionary<string, dynamic> vars);
 
 		protected virtual void Dispose(bool disposing)
 		{

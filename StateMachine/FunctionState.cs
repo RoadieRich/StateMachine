@@ -32,17 +32,17 @@
 		}
 
 
-		protected sealed override void Enter(Dictionary<string, dynamic> vars)
+		protected sealed override void Enter(IDictionary<string, dynamic> vars)
 		{
 			_enterFunc?.Invoke(vars);
 		}
 
-		protected sealed override void Exit(Dictionary<string, dynamic> vars)
+		protected sealed override void Exit(IDictionary<string, dynamic> vars)
 		{
 			_exitFunc?.Invoke(vars);
 		}
 
-		protected sealed override void Inner(Dictionary<string, dynamic> vars)
+		protected sealed override void Inner(IDictionary<string, dynamic> vars)
 		{
 			_innerFunc(vars);
 		}
