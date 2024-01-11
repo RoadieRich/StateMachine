@@ -12,11 +12,11 @@ using (StateMachine funcSm = new())
 
 	initFuncState.AddTransitionTo(funcState, (vars) => true);
 
-	incrementFuncState.AddTransitionTo(StateMachine.ExitState, (vars) => vars["x"] > 10);
-	incrementFuncState.AddTransitionTo(funcState, (vars) => true);
+	incrementFuncState.AddTransitionTo(StateMachine.ExitState, (vars) => vars["x"] > 10)
+					  .AddTransitionTo(funcState, (vars) => true);
 
-	funcState.AddTransitionTo(evenFuncState, (vars) => vars["x"] % 2 == 0);
-	funcState.AddTransitionTo(oddFuncState, (vars) => vars["x"] % 2 == 1);
+	funcState.AddTransitionTo(evenFuncState, (vars) => vars["x"] % 2 == 0)
+			 .AddTransitionTo(oddFuncState, (vars) => vars["x"] % 2 == 1);
 
 	evenFuncState.AddTransitionTo(incrementFuncState, (vars) => true);
 
