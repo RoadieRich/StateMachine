@@ -31,13 +31,10 @@ Console.Out.WriteLine("Using class states");
 
 using (var classSM = new StateMachine())
 {
-	var initState = new InitState();
 	var mainState = new MainState();
 	var oddState = new OddState();
 	var evenState = new EvenState();
 	var incrementState = new IncrementState();
-
-	initState.AddTransitionTo(mainState, null);
 
 	mainState.AddTransitionTo(oddState, (vars) => vars["x"] % 2 == 1);
 	mainState.AddTransitionTo(evenState, (vars) => vars["x"] % 2 == 0);
@@ -49,6 +46,8 @@ using (var classSM = new StateMachine())
 	incrementState.AddTransitionTo(StateMachine.ExitState, (vars) => vars["x"] > 10);
 	incrementState.AddTransitionTo(mainState, null);
 
-	classSM.InitialState = initState;
-	classSM.Run();
+	classSM.InitialState = mainState;
+
+	// you can also pass in a vars dictionary
+	classSM.Run(new Dictionary<string, dynamic> { ["x"] = 0 });
 }

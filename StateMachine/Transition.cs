@@ -11,7 +11,7 @@
 		}
 		public State To { get; }
 		public TransitionConditionDelegate? Condition { get; }
-		public bool CheckCondition(Dictionary<string, dynamic> vars)
+		public bool CheckCondition(IDictionary<string, dynamic> vars)
 		{
 			return Condition == null || Condition(vars);
 		}
