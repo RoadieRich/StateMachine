@@ -27,7 +27,7 @@ jobs:
       run: dotnet build --no-restore -c Release
       
     - name: Test
-      run: dotnet test --no-build --verbosity normal
+      run: dotnet test --verbosity normal
       
     - name: Publish
       run: dotnet nuget push StateMachine/bin/Release/RoadieRichStateMachine*.nupkg -k ${PUBLISH_KEY} --source https://api.nuget.org/v3/index.json
