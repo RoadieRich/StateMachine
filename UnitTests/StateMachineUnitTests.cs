@@ -33,14 +33,42 @@ namespace UnitTests
 				["x"] = 0
 			};
 
-			var funcState = new FunctionState((vars) => vars["x"]++);
-			funcState.AddTransitionTo(StateMachine.ExitState, null);
+			var funcState = new FunctionState("func state", (vars) => vars["x"]++);
+			funcState.AlwaysTransitionTo(StateMachine.ExitState);
 
 			using var sm = new StateMachine();
 			sm.InitialState = funcState;
 			sm.Run(vars);
 
 			Assert.AreEqual(expected: 1, actual: vars["x"]);
+		}
+
+		[TestMethod]
+		public void StartStateEventIsTriggered()
+		{
+			var state = new FunctionState("", (vars) => { });
+			state.AlwaysTransitionTo(StateMachine.ExitState);
+
+			using var sm = new StateMachine() { InitialState = state };
+			int anInt = 0;
+			sm.StateStarting += (sender, e) => anInt++;
+			sm.Run();
+
+			Assert.AreEqual(expected: 1, actual: anInt);
+		}
+
+		[TestMethod]
+		public void EndStateEventIsTriggered()
+		{
+			var state = new FunctionState("", (vars) => { });
+			state.AlwaysTransitionTo(StateMachine.ExitState);
+
+			using var sm = new StateMachine() { InitialState = state };
+			int anInt = 0;
+			sm.StateFinished += (sender, e) => anInt++;
+			sm.Run();
+
+			Assert.AreEqual(expected: 1, actual: anInt);
 		}
 	}
 }

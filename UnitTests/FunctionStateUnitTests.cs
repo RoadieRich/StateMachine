@@ -19,9 +19,9 @@ namespace UnitTests
 		{
 			var b = false;
 
-			var funcState = new FunctionState((vars) => b = true);
+			var funcState = new FunctionState(() => b = true);
 
-			funcState.AddTransitionTo(StateMachine.ExitState, null);
+			funcState.AlwaysTransitionTo(StateMachine.ExitState);
 
 			using var sm = new StateMachine();
 
@@ -36,9 +36,9 @@ namespace UnitTests
 		{
 			var aBool = false;
 
-			var funcState = new FunctionState((vars) => aBool = true, (vars) => { }, null);
+			var funcState = new FunctionState(() => aBool = true, () => { }, null);
 
-			funcState.AddTransitionTo(StateMachine.ExitState, null);
+			funcState.AlwaysTransitionTo(StateMachine.ExitState);
 
 			using var sm = new StateMachine();
 
@@ -53,9 +53,9 @@ namespace UnitTests
 		{
 			var aBool = false;
 
-			var funcState = new FunctionState(null, (vars) => { }, (vars) => aBool = true);
+			var funcState = new FunctionState(null, () => { }, () => aBool = true);
 
-			funcState.AddTransitionTo(StateMachine.ExitState, null);
+			funcState.AlwaysTransitionTo(StateMachine.ExitState);
 
 			using var sm = new StateMachine();
 
@@ -66,13 +66,13 @@ namespace UnitTests
 		}
 
 		[TestMethod]
-		public void InnerIsOnlyCalledRepeatedly()
+		public void InnerIsCalledRepeatedly()
 		{
 			var anInt = 0;
 
-			var funcState = new FunctionState((vars) => anInt++);
+			var funcState = new FunctionState(() => anInt++);
 
-			funcState.AddTransitionTo(StateMachine.ExitState, (vars) => anInt > 10);
+			funcState.AddTransitionTo(StateMachine.ExitState, () => anInt > 10);
 
 			using var sm = new StateMachine();
 
@@ -88,9 +88,9 @@ namespace UnitTests
 			var anInt = 0;
 			var anotherInt = 0;
 
-			var funcState = new FunctionState((vars) => anInt++, (vars) => anotherInt++, null);
+			var funcState = new FunctionState(() => anInt++, () => anotherInt++, null);
 
-			funcState.AddTransitionTo(StateMachine.ExitState, (vars) => anotherInt > 10);
+			funcState.AddTransitionTo(StateMachine.ExitState, () => anotherInt > 10);
 
 			using var sm = new StateMachine();
 
@@ -107,9 +107,9 @@ namespace UnitTests
 			var anInt = 0;
 			var anotherInt = 0;
 
-			var funcState = new FunctionState(null, (vars) => anotherInt++, (vars) => anInt++);
+			var funcState = new FunctionState(null, () => anotherInt++, () => anInt++);
 
-			funcState.AddTransitionTo(StateMachine.ExitState, (vars) => anotherInt > 10);
+			funcState.AddTransitionTo(StateMachine.ExitState, () => anotherInt > 10);
 
 			using var sm = new StateMachine();
 

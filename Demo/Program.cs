@@ -39,12 +39,12 @@ using (var classSM = new StateMachine())
 	mainState.AddTransitionTo(oddState, (vars) => vars["x"] % 2 == 1);
 	mainState.AddTransitionTo(evenState, (vars) => vars["x"] % 2 == 0);
 
-	oddState.AddTransitionTo(incrementState, null);
+	oddState.AlwaysTransitionTo(incrementState);
 
-	evenState.AddTransitionTo(incrementState, null);
+	evenState.AlwaysTransitionTo(incrementState);
 
 	incrementState.AddTransitionTo(StateMachine.ExitState, (vars) => vars["x"] > 10);
-	incrementState.AddTransitionTo(mainState, null);
+	incrementState.AlwaysTransitionTo(mainState);
 
 	classSM.InitialState = mainState;
 
