@@ -12,7 +12,20 @@
 		/// </summary>
 		public State InitialState { get; set; } = ExitState;
 
+		/// <summary>
+		/// Time to pause between executions of <see cref="State.Inner(IDictionary{string, dynamic})"/>
+		/// </summary>
 		public int Delay { get; set; } = 0;
+
+		/// <summary>
+		/// Raised before a State is started
+		/// </summary>
+		public event StateEventHandler? StateStarting;
+
+		/// <summary>
+		/// Raised when a State has finished
+		/// </summary>
+		public event StateEventHandler? StateFinished;
 
 		/// <summary>
 		/// If a state's <see cref="Transition"/> points to this state, the state machine is terminated.
@@ -30,7 +43,10 @@
 			
 			while (state != ExitState)
 			{
-				state = state.RunAndGetNextState(Delay, myVars);
+				StateStarting?.Invoke(this, new StateEventArgs(state));
+				State nextState = state.RunAndGetNextState(Delay, myVars);
+				StateFinished?.Invoke(this, new StateEventArgs(state));
+				state = nextState;
 			}
 		}
 

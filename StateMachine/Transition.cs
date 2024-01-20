@@ -4,13 +4,21 @@
 	{
 		private bool disposedValue;
 
-		internal Transition(State to, TransitionConditionDelegate? condition)
+		public Transition(State to)
 		{
 			To = to;
+			Condition = null;
+		}
+
+		internal Transition(State to, TransitionConditionDelegate condition) : this(to, (vars) => condition()) { }
+
+		internal Transition(State to, TransitionConditionDelegateWithVars condition) : this(to)
+		{
 			Condition = condition;
 		}
+
 		public State To { get; }
-		public TransitionConditionDelegate? Condition { get; }
+		public TransitionConditionDelegateWithVars? Condition { get; }
 		public bool CheckCondition(IDictionary<string, dynamic> vars)
 		{
 			return Condition == null || Condition(vars);

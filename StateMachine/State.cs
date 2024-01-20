@@ -8,6 +8,14 @@
 		private readonly List<Transition> transitions = new();
 		private bool disposedValue;
 
+		public string? Name { get; }
+
+		protected State(string? name = null)
+		{
+			Name = name;
+		}
+
+
 		/// <summary>
 		/// Adds a state this state can transition to
 		/// </summary>
@@ -15,10 +23,33 @@
 		/// <param name="condition">condition to transition.  Evaluated each time <see cref="Inner(Dictionary{string, dynamic})"/> is run.  If true, the state machine moves to the associated state.  Use <c>null</c> to always transition.</param>
 		/// <remarks>Transition conditions are evaulated in the order they are added.</remarks>
 		/// <returns>The state this method was called on</returns>
-		public State AddTransitionTo(State to, TransitionConditionDelegate? condition)
+		public State AddTransitionTo(State to, TransitionConditionDelegateWithVars condition)
 		{
 			transitions.Add(new Transition(to, condition));
 			return this;
+		}
+
+		/// <summary>
+		/// Adds a state this state can transition to
+		/// </summary>
+		/// <param name="to">state to transition to</param>
+		/// <param name="condition">condition to transition.  Evaluated each time <see cref="Inner(Dictionary{string, dynamic})"/> is run.  If true, the state machine moves to the associated state.  Use <c>null</c> to always transition.</param>
+		/// <remarks>Transition conditions are evaulated in the order they are added.</remarks>
+		/// <returns>The state this method was called on</returns>
+		public State AddTransitionTo(State to, TransitionConditionDelegate condition)
+		{
+			transitions.Add(new Transition(to, condition));
+			return this;
+		}
+
+		/// <summary>
+		/// Adds a state this state will always transition to
+		/// </summary>
+		/// <param name="to">state to always transition to</param>
+		/// <remarks>Transition conditions are evaulated in the order they are added.</remarks>
+		public void AlwaysTransitionTo(State to)
+		{
+			transitions.Add(new Transition(to));
 		}
 
 		internal State RunAndGetNextState(int delay, IDictionary<string, dynamic> vars)
@@ -93,6 +124,11 @@
 			// Do not change this code. Put cleanup code in 'Dispose(bool disposing)' method
 			Dispose(disposing: true);
 			GC.SuppressFinalize(this);
+		}
+
+		public override string ToString()
+		{
+			return Name ?? GetType().Name[..GetType().Name.LastIndexOf("State")];
 		}
 	}
 }
