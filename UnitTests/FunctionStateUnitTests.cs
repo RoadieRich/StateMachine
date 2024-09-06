@@ -1,20 +1,21 @@
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
+using NUnit.Framework.Legacy;
 using RoadieRichStateMachine;
 using System.Runtime.CompilerServices;
 
 namespace UnitTests
 {
-	[TestClass]
+	[TestFixture]
 	public class FunctionStateUnitTests
 	{
-		[TestMethod]
+		[Test]
 		public void EmptyStateMachineCanRun()
 		{
 			using var sm = new StateMachine();
-			sm.Run();
+			Assert.That(()=>sm.Run(), Throws.Nothing);
 		}
 
-		[TestMethod]
+		[Test]
 		public void FunctionStateRunsInnerFunctions()
 		{
 			var b = false;
@@ -28,10 +29,10 @@ namespace UnitTests
 			sm.InitialState = funcState;
 			sm.Run();
 
-			Assert.IsTrue(b);
+			Assert.That(b, Is.True);
 		}
 
-		[TestMethod]
+		[Test]
 		public void FunctionStateRunsEntryFunction()
 		{
 			var aBool = false;
@@ -45,10 +46,10 @@ namespace UnitTests
 			sm.InitialState = funcState;
 			sm.Run();
 
-			Assert.IsTrue(aBool);
+			Assert.That(aBool, Is.True);
 		}
 
-		[TestMethod]
+		[Test]
 		public void FunctionStateRunsExitFunction()
 		{
 			var aBool = false;
@@ -62,11 +63,11 @@ namespace UnitTests
 			sm.InitialState = funcState;
 			sm.Run();
 
-			Assert.IsTrue(aBool);
+			Assert.That(aBool, Is.True);
 		}
 
-		[TestMethod]
-		public void InnerIsOnlyCalledRepeatedly()
+		[Test]
+		public void InnerIsCalledRepeatedly()
 		{
 			var anInt = 0;
 
@@ -79,10 +80,10 @@ namespace UnitTests
 			sm.InitialState = funcState;
 			sm.Run();
 
-			Assert.AreNotEqual(notExpected: 0, actual: anInt);
+			Assert.That(anInt, Is.GreaterThan(1));
 		}
 
-		[TestMethod]
+		[Test]
 		public void EnterIsOnlyCalledOnce()
 		{
 			var anInt = 0;
@@ -98,9 +99,9 @@ namespace UnitTests
 			sm.Run();
 
 
-			Assert.AreEqual(expected: 1, actual: anInt);
+			Assert.That(anInt, Is.EqualTo(1));
 		}
-		[TestMethod]
+		[Test]
 		public void ExitIsOnlyCalledOnce()
 		{
 
@@ -116,7 +117,7 @@ namespace UnitTests
 			sm.InitialState = funcState;
 			sm.Run();
 
-			Assert.AreEqual(expected: 1, actual: anInt);
+			Assert.That(anInt, Is.EqualTo(1));
 		}
 	}
 }

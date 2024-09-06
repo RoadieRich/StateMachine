@@ -1,19 +1,20 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using NUnit.Framework;
+using NUnit.Framework.Legacy;
 using RoadieRichStateMachine;
 
 namespace UnitTests
 {
-	[TestClass]
+	[TestFixture]
 	public class StateMachineUnitTests
 	{
-		[TestMethod]
+		[Test]
 		public void StateMachineCanRun()
 		{
 			using var sm = new StateMachine();
-			sm.Run();
+			Assert.That(() => sm.Run(), Throws.Nothing);
 		}
 
-		[TestMethod]
+		[Test]
 		public void VarsCanBePassedIn()
 		{
 			Dictionary<string, dynamic> vars = new() 
@@ -22,10 +23,10 @@ namespace UnitTests
 			};
 
 			using var sm = new StateMachine();
-			sm.Run(vars);
+			Assert.That(() => sm.Run(vars), Throws.Nothing);
 		}
 
-		[TestMethod]
+		[Test]
 		public void VarsCanBeModified()
 		{
 			Dictionary<string, dynamic> vars = new()
@@ -40,7 +41,35 @@ namespace UnitTests
 			sm.InitialState = funcState;
 			sm.Run(vars);
 
-			Assert.AreEqual(expected: 1, actual: vars["x"]);
+			Assert.That(vars, Does.ContainKey("x").WithValue(1));
+		}
+
+		[Test]
+		public void StartStateEventIsTriggered()
+		{
+			var state = new FunctionState("", (vars) => { });
+			state.AlwaysTransitionTo(StateMachine.ExitState);
+
+			using var sm = new StateMachine() { InitialState = state };
+			int anInt = 0;
+			sm.StateStarting += (sender, e) => anInt++;
+			sm.Run();
+
+			Assert.That(anInt, Is.EqualTo(1));
+		}
+
+		[Test]
+		public void EndStateEventIsTriggered()
+		{
+			var state = new FunctionState("", (vars) => { });
+			state.AlwaysTransitionTo(StateMachine.ExitState);
+
+			using var sm = new StateMachine() { InitialState = state };
+			int anInt = 0;
+			sm.StateFinished += (sender, e) => anInt++;
+			sm.Run();
+
+			Assert.That(anInt, Is.EqualTo(1));
 		}
 	}
 }
