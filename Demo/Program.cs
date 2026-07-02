@@ -10,17 +10,17 @@ using (StateMachine funcSm = new())
 	var evenFuncState = new FunctionState((vars) => Console.WriteLine("is even"));
 	var oddFuncState = new FunctionState((vars) => Console.WriteLine("is odd"));
 
-	initFuncState.AddTransitionTo(funcState, (vars) => true);
+	initFuncState.AlwaysTransitionTo(funcState);
 
 	incrementFuncState.AddTransitionTo(StateMachine.ExitState, (vars) => vars["x"] > 10)
-					  .AddTransitionTo(funcState, (vars) => true);
+					  .AlwaysTransitionTo(funcState);
 
 	funcState.AddTransitionTo(evenFuncState, (vars) => vars["x"] % 2 == 0)
 			 .AddTransitionTo(oddFuncState, (vars) => vars["x"] % 2 == 1);
 
-	evenFuncState.AddTransitionTo(incrementFuncState, (vars) => true);
+	evenFuncState.AlwaysTransitionTo(incrementFuncState);
 
-	oddFuncState.AddTransitionTo(incrementFuncState, (vars) => true);
+	oddFuncState.AlwaysTransitionTo(incrementFuncState);
 
 
 	funcSm.InitialState = initFuncState;
