@@ -2,7 +2,6 @@ A simple state machine library.  Can use states that are defined using delegates
 
 ```C#
 
-```
 using (StateMachine funcSm = new())
 {
 	var initFuncState = new FunctionState((vars) => vars["x"] = 0);
